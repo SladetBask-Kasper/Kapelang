@@ -1,0 +1,13 @@
+// This is a standard KapeLang Source file.
+
+print "Hello, World!"
+
+int #myVar = 13
+str #name  = "Kape"
+
+func §myFunc(int #funcNum, string #called) {
+    print f"This is function number #funcNum, also known as #called. That is \#epic"
+    return True
+}
+
+§myFunc(1, "This be my func")
