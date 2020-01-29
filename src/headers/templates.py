@@ -1,5 +1,4 @@
-includes = """
-#include <iostream>
+includes = """#include <iostream>
 #include <sstream>
 #include <stdio.h>
 """

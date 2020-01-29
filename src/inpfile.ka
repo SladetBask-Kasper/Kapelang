@@ -4,9 +4,11 @@ print "Hello, World!"
 
 #myVar = 13 // idk this is a comment
 #name  = "Kape"
+#funcNum = 69
+#called = "Lmao"
 
 func §myFunc(int #funcNum, string #called) {
-    print f"This is function number #funcNum, also known as #called. That is \#epic"
+    fprint "This is function number #funcNum, also known as #called. That is \#epic"
     return True
 }
 

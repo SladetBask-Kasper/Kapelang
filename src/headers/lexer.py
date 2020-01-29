@@ -27,8 +27,11 @@ def lexer(txt):
                 if not inString:
                     tokens.append("STR:"+command)
                 continue
-            if inString:
-                    command += char
+            if inString or inInt:
+                command += char
+            elif command == "fprint":
+                tokens.append("PRINTF")
+                command = ""
             elif command == "print":
                 tokens.append("PRINT")
                 command = ""
@@ -37,9 +40,8 @@ def lexer(txt):
                     tmp = int(command.strip())
                 except:
                     pass
-                else:
-                    command = command.strip()+char
-                    inInt = True
+                command = command.strip()+char
+                inInt = True
             elif char.lower() in a:
                 command += char
             elif char == '.':
@@ -53,11 +55,12 @@ def lexer(txt):
             elif char == "§":
                 commandType = Types.function
             elif char == "=":
-                tokens.append(command)
                 tokens.append("ASSIGNMENT")
+                tokens.append(command)
                 command = ""
         if commandType == Types.function:
             tokens.append("FUNC_NAME:"+command)
         if inInt:
             tokens.append("INT:"+command)
+            inInt = False
     return tokens

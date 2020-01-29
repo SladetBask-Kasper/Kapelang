@@ -4,6 +4,9 @@ import headers.parser as parser
 
 if len(argv) < 2:
     argv.append("inpfile.ka")
+    argv.append("PAR")
+else:
+    if argv[1] == "@": argv[1] = "inpfile.ka"
 content = []
 file = open(str(argv[1]), "r")
 for l in file:
@@ -22,5 +25,11 @@ if __name__ == "__main__":
     # Main func
     lex = lexer.lexer(content)
     par = parser.parser(lex)
-    print(lex)
-    #print(par)
+    arg = "SHOWLEX"
+    try:
+        arg = argv[2]
+    except:pass
+    if arg == "SHOWLEX" or arg == "LEX":
+        print(lex)
+    elif arg == "SHOWPAR" or arg == "SHOWPARSE" or arg == "PARSE" or arg == "PAR":
+        print(par)
