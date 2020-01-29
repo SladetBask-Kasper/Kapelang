@@ -13,3 +13,4 @@ func §myFunc(int #funcNum, string #called) {
 }
 
 §myFunc(#myVar, "This be my func")
+fprint "#VER"

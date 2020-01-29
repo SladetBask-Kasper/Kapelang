@@ -9,6 +9,8 @@ from headers.templates import maine
 from headers.lexer import a
 from headers.lexer import nums
 
+#import headers.auto as Auto
+
 def parser(tokens):
     global includes
     global defines
@@ -30,6 +32,7 @@ def parser(tokens):
             if word.count("#") > 0:
                 varName=""
                 inVarName = False
+                execute = False
                 lets = list(word)
                 for i in range(len(lets)):
                     let = lets[i]
@@ -37,14 +40,20 @@ def parser(tokens):
                         if let.lower() in a or let in nums:
                             varName += let
                         else:
+                            execute = True
+
+                        if i == len(lets)-1:
+                            execute = True
+
+                        if execute:
                             inVarName = False
                             appender = str(f"\"<<{varName}<<\"")
-                            #start = int(i-len(str(varName+"#")))
                             tmp = word.split("#"+varName)
                             word = tmp[0]+appender+tmp[1]
                             varName = ""
+                            execute = False
                     else:
-                        if let == "#":
+                        if (let == "#") and (not lets[i-1] == "\\"):
                             inVarName = True
 
             maine += str(f"cout << \"{word}\" << endl;")
