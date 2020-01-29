@@ -1,0 +1,5 @@
+null = "[None]"
+string = "[str]"
+function = "[func]"
+integer = "[int]"
+classes = "[Class]"

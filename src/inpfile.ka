@@ -2,12 +2,12 @@
 
 print "Hello, World!"
 
-int #myVar = 13
-str #name  = "Kape"
+#myVar = 13 // idk this is a comment
+#name  = "Kape"
 
 func §myFunc(int #funcNum, string #called) {
     print f"This is function number #funcNum, also known as #called. That is \#epic"
     return True
 }
 
-§myFunc(1, "This be my func")
+§myFunc(#myVar, "This be my func")
