@@ -24,7 +24,6 @@ del file
 if __name__ == "__main__":
     # Main func
     lex = lexer.lexer(content)
-    par = parser.parser(lex)
     arg = "SHOWLEX"
     try:
         arg = argv[2]
@@ -32,4 +31,5 @@ if __name__ == "__main__":
     if arg == "SHOWLEX" or arg == "LEX":
         print(lex)
     elif arg == "SHOWPAR" or arg == "SHOWPARSE" or arg == "PARSE" or arg == "PAR":
+        par = parser.parser(lex)
         print(par)

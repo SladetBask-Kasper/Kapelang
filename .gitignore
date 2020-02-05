@@ -4,4 +4,6 @@
 *.out
 logs
 __pycache__
-.pyc
+*.pyc
+*.cpp
+auto.py

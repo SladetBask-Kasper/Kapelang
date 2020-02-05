@@ -59,9 +59,9 @@ def parser(tokens):
             maine += str(f"cout << \"{word}\" << endl;")
             x += 1
         elif tokens[x] == "ASSIGNMENT":
-            varName = tokens[x+1]
-            content = str(tokens[x+2])[4:]
-            types = str(tokens[x+2])[:3]
+            varName = tokens[x-1][4:]
+            content = str(tokens[x+1])[4:]
+            types = str(tokens[x+1])[:3]
             t = "auto"
             if types == "INT":
                 t = "int"

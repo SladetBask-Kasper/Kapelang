@@ -9,11 +9,9 @@ funcs = """
 void printVersion() {
 using namespace std;
 cout << "VERSION:" << VER << endl;
-return;
-}
+return;}
 """
 maine = """
 int main(int argc, char const *argv[]) {
 using namespace std;
-
 """
