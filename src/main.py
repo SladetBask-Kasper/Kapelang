@@ -31,5 +31,5 @@ if __name__ == "__main__":
     if arg == "SHOWLEX" or arg == "LEX":
         print(lex)
     elif arg == "SHOWPAR" or arg == "SHOWPARSE" or arg == "PARSE" or arg == "PAR":
-        par = parser.parser(lex)
+        par = parser.parser(lex).replace("\#", "#")
         print(par)

@@ -12,6 +12,7 @@ cout << "VERSION:" << VER << endl;
 return;}
 """
 maine = """
+
 int main(int argc, char const *argv[]) {
 using namespace std;
 """

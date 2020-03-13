@@ -6,23 +6,68 @@ from headers.templates import includes
 from headers.templates import defines
 from headers.templates import funcs
 from headers.templates import maine
-from headers.lexer import a
+from headers.lexer import alphabet
 from headers.lexer import nums
 
 #import headers.auto as Auto
+
+###
+### Translates token datatypes into c++ code datatypes.
+### If no datatype is found it returns original value.
+###
+def datatype_translator(datatype = "CAST_INT"):
+    # ======= START OF TYPES ======= #
+    if datatype == "CAST_BOOL":
+        return "bool"
+    elif datatype == "CAST_CSTR":
+        return "char*"
+    elif datatype == "CAST_INT":
+        return "int"
+    elif datatype == "CAST_STR":
+        return "std::string"
+    elif datatype == "CAST_L":
+        return "long"
+    elif datatype == "CAST_F":
+        return "float"
+    elif datatype == "CAST_D":
+        return "double"
+    else:
+        return datatype
+    # ======= END OF TYPES ======= #
+
+def datatype_to_c(data):
+    if data[:4] == "STR:":
+        return str(f"(std::string) \"{data[4:]}\"")
+    elif data[:4] == "INT:":
+        return str(f"(int) {data[4:]}")
+    elif data[:5] == "LONG:":
+        return str(f"(long) {data[5:]}")
+    elif data[:5] == "CSTR:":
+        return str(f"(char*) \"{data[5:]}\"")
+    elif data[:5] == "BOOL:":
+        frlse = "false" # True + False = Frlse
+        if data[5:] == "TRUE":
+            frlse = "true"
+        else: frlse = "false"
+        return str(f"(bool) {frlse}")
+    else:
+        return data
 
 def parser(tokens):
     global includes
     global defines
     global funcs
     global maine
+
     x = 0
+    where = "inMaine"
     while x < len(tokens):
+        code = ""
         if tokens[x] == "PRINT":
             word = ""
             if str(tokens[x+1])[:4] == "STR:":
                 word = str(tokens[x+1])[4:]
-            maine += str(f"cout << \"{word}\" << endl;")
+            code += str(f"std::cout << \"{word}\" << std::endl;")
             x += 1
         elif tokens[x] == "PRINTF":
             word = ""
@@ -37,7 +82,7 @@ def parser(tokens):
                 for i in range(len(lets)):
                     let = lets[i]
                     if inVarName:
-                        if let.lower() in a or let in nums:
+                        if let.lower() in alphabet or let in nums:
                             varName += let
                         else:
                             execute = True
@@ -56,7 +101,7 @@ def parser(tokens):
                         if (let == "#") and (not lets[i-1] == "\\"):
                             inVarName = True
 
-            maine += str(f"cout << \"{word}\" << endl;")
+            code += str(f"std::cout << \"{word}\" << std::endl;")
             x += 1
         elif tokens[x] == "ASSIGNMENT":
             varName = tokens[x-1][4:]
@@ -68,9 +113,107 @@ def parser(tokens):
             elif types == "STR":
                 t = "std::string"
                 content = str(f"\"{content}\"")
-            maine += str(f"{t} {varName} = {content};")
-            x += 2
+            code += str(f"{t} {varName} = {content};")
+            x += 2-1
+        elif tokens[x] == "ASSIGN_FUNC" :
+            where = "inFunc"
+            a = 1 # appender
+            funcName = "functionName"
+            funcType = "void"
+            funcArgs = "()"
 
 
+            funcType = datatype_translator(tokens[x+a])
+            a+=1
+            if tokens[x+a][:10] == "FUNC_NAME:":
+                funcName = tokens[x+a][10:]
+                a += 1
+            if tokens[x+a] == "ARG_RANGE":
+                a += 1
+            else:
+                print("ERROR: MALFORMED FUNCTION DECLARATION (misplaced ':' operator)")
+                exit()
+            args = []
+            while not tokens[x+a] == "END_ARGS":
+                item = tokens[x+a]
+                if item[:5] == "CAST_":
+                    args.append(datatype_translator(item))
+                elif item == "NEXT":
+                    args.append(",")
+                elif item[:4] == "VAR:":
+                    args.append(item[4:])
+                a+=1
+            if args[-1:] == ",":
+                args = args[:-1]
+            funcArgs = "("
+            for i in args :
+                if i == ",":
+                    if funcArgs[-1:] == " ":
+                        funcArgs = funcArgs[:-1]
+
+                funcArgs+=i+" "
+            if funcArgs[-1:] == " ":
+                funcArgs = funcArgs[:-1]
+            if funcArgs[-1:] == ",":
+                funcArgs = funcArgs[:-1]
+            funcArgs += ")"
+            x += a-1
+            code += str(funcType+" "+funcName+funcArgs)
+        elif tokens[x] == "START_SCOPE": code+="\n{\n"
+        elif tokens[x] == "END_SCOPE"  :
+            code+="\n}\n"
+            if where == "inFunc":
+                where = "inMaine"
+                funcs+=code
+                x += 1
+                continue
+        elif tokens[x][:10] == "FUNC_NAME:":
+            a = 0
+            funcName = "functionName"
+            funcArgs = "("
+
+            funcName = tokens[x+a][10:]
+            a+=1
+            if tokens[x+a] == "ARG_RANGE":
+                a+=1
+                args = []
+                while not tokens[x+a] == "END_ARGS":
+                    item = tokens[x+a]
+                    if item[:5] == "CAST_":
+                        args.append(datatype_translator(item))
+                    elif item == "NEXT":
+                        args.append(",")
+                    elif item[:4] == "VAR:":
+                        args.append(item[4:])
+                    else:
+                        args.append(datatype_to_c(item))
+                    a+=1
+                if args[-1:] == ",":
+                    args = args[:-1]
+                funcArgs = "("
+                for i in args :
+                    if i == ",":
+                        if funcArgs[-1:] == " ":
+                            funcArgs = funcArgs[:-1]
+
+                    funcArgs+=i+" "
+                if funcArgs[-1:] == " ":
+                    funcArgs = funcArgs[:-1]
+                if funcArgs[-1:] == ",":
+                    funcArgs = funcArgs[:-1]
+                funcArgs += ")"
+                x += a-1
+                code += str(funcName+funcArgs+";")
+            else:
+                #x += 1 # oops this is done automatically.
+                code += str(funcName+"();")
+        elif tokens[x] == "RETURN":
+            if len(tokens) >= x+1:
+                code += str(f"return {datatype_to_c(tokens[x+1])};")
+                x += 1
+
+
+        if where == "inMaine" : maine+=code
+        if where == "inFunc"  : funcs+=code
         x += 1
     return str(includes+defines+funcs+maine+"}")
