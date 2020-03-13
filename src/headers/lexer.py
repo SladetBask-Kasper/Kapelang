@@ -7,6 +7,8 @@ import headers.Types as Types
 alphabet = list(string.ascii_lowercase)
 nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 separators = list(";,.<>|@!?{([])}&%§")
+comparative_operators = ["==", "=>", "<=", "<", ">", "!="]
+
 def lexer(txt):
     ###
     ### This function will tokenize the lines given by the filereader from main.
@@ -109,6 +111,8 @@ def lexer(txt):
             elif word == "return": tokens.append("RETURN")
             elif word == "True": tokens.append("BOOL:TRUE")
             elif word == "False": tokens.append("BOOL:FALSE")
+            elif word == "if": tokens.append("IF")
+            elif word in comparative_operators: tokens.append("COMP:"+word)
 
 
     return tokens

@@ -50,6 +50,8 @@ def datatype_to_c(data):
             frlse = "true"
         else: frlse = "false"
         return str(f"(bool) {frlse}")
+    elif data[:4] == "VAR:":
+        return str(f"{data[4:]}")
     else:
         return data
 
@@ -61,6 +63,7 @@ def parser(tokens):
 
     x = 0
     where = "inMaine"
+    inIf = 0
     while x < len(tokens):
         code = ""
         if tokens[x] == "PRINT":
@@ -162,7 +165,9 @@ def parser(tokens):
         elif tokens[x] == "START_SCOPE": code+="\n{\n"
         elif tokens[x] == "END_SCOPE"  :
             code+="\n}\n"
-            if where == "inFunc":
+            if inIf > 0:
+                inIf-=1
+            elif where == "inFunc":
                 where = "inMaine"
                 funcs+=code
                 x += 1
@@ -211,6 +216,17 @@ def parser(tokens):
             if len(tokens) >= x+1:
                 code += str(f"return {datatype_to_c(tokens[x+1])};")
                 x += 1
+        elif tokens[x] == "IF":
+            a = 1
+            if tokens[x+a] == "ARG_RANGE":
+                a += 1
+                operand1       = datatype_to_c(tokens[x+a+0])
+                comparative_op = tokens[x+a+1][5:]
+                operand2       = datatype_to_c(tokens[x+a+2])
+                a += 2
+                code += str(f"if ({operand1} {comparative_op} {operand2})")
+                x += a+1
+                inIf += 1
 
 
         if where == "inMaine" : maine+=code
