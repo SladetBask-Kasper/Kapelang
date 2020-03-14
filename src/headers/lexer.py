@@ -5,9 +5,10 @@
 import string
 import headers.Types as Types
 alphabet = list(string.ascii_lowercase)
-nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"]
 separators = list(";,.<>|@!?{([])}&%§")
-comparative_operators = ["==", "=>", "<=", "<", ">", "!="]
+comparative_operators = ["==", ">=", "<=", "<", ">", "!="]
+appendo_opperators = ["||", "&&", "and", "or"]
 
 def lexer(txt):
     ###
@@ -112,7 +113,10 @@ def lexer(txt):
             elif word == "True": tokens.append("BOOL:TRUE")
             elif word == "False": tokens.append("BOOL:FALSE")
             elif word == "if": tokens.append("IF")
+            elif word == "else": tokens.append("ELSE")
+            elif word == "elif": tokens.append("ELIF")
             elif word in comparative_operators: tokens.append("COMP:"+word)
+            elif word in appendo_opperators: tokens.append("APP:"+(word).replace("and", "&&").replace("or", "||"))
 
 
     return tokens

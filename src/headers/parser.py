@@ -52,6 +52,8 @@ def datatype_to_c(data):
         return str(f"(bool) {frlse}")
     elif data[:4] == "VAR:":
         return str(f"{data[4:]}")
+    elif data[:10] == "FUNC_NAME:":
+            return str(f"{data[10:]}()")
     else:
         return data
 
@@ -172,6 +174,11 @@ def parser(tokens):
                 funcs+=code
                 x += 1
                 continue
+        elif tokens[x][:5] == "BOOL:":
+            code += datatype_to_c(tokens[x])+";" # NOTE : THIS ; DOESN'T SOLVE ANYTHING.
+                                                 # For now make sure bools that aren't at
+                                                 # The end of line are captured by the
+                                                 # Token prior.
         elif tokens[x][:10] == "FUNC_NAME:":
             a = 0
             funcName = "functionName"
@@ -210,23 +217,36 @@ def parser(tokens):
                 x += a-1
                 code += str(funcName+funcArgs+";")
             else:
-                #x += 1 # oops this is done automatically.
                 code += str(funcName+"();")
         elif tokens[x] == "RETURN":
             if len(tokens) >= x+1:
-                code += str(f"return {datatype_to_c(tokens[x+1])};")
-                x += 1
-        elif tokens[x] == "IF":
+                code += "return "
+            else:
+                code += "return;"
+        elif tokens[x] == "IF" or tokens[x] == "ELIF":
+            command = "yeet"
+            if tokens[x] == "IF":
+                command = "if"
+            else :
+                command = "else if"
             a = 1
             if tokens[x+a] == "ARG_RANGE":
                 a += 1
-                operand1       = datatype_to_c(tokens[x+a+0])
-                comparative_op = tokens[x+a+1][5:]
-                operand2       = datatype_to_c(tokens[x+a+2])
-                a += 2
-                code += str(f"if ({operand1} {comparative_op} {operand2})")
-                x += a+1
+                operands = []
+                while not tokens[x+a] == "END_ARGS":
+                    if tokens[x+a][:5] == "COMP:":
+                        operands.append(tokens[x+a][5:])
+                    elif tokens[x+a][:4] == "APP:":
+                        operands.append(tokens[x+a][4:])
+                    else:
+                        operands.append(datatype_to_c(tokens[x+a]))
+                    a+=1
+                code += str(f"{command} ({' '.join(operands)})")
+                x += a
                 inIf += 1
+        elif tokens[x] == "ELSE":
+            code += "else"
+            inIf += 1
 
 
         if where == "inMaine" : maine+=code
