@@ -66,6 +66,7 @@ def parser(tokens):
     x = 0
     where = "inMaine"
     inIf = 0
+    isHeader = False
     while x < len(tokens):
         code = ""
         if tokens[x] == "PRINT":
@@ -247,9 +248,27 @@ def parser(tokens):
         elif tokens[x] == "ELSE":
             code += "else"
             inIf += 1
+        elif tokens[x] == "IMPORT":
+            if len(tokens) >= x+1:
+                x+=1
+                includes += str(f"#include <{tokens[x][4:]}>") # 4: because we expect a string.
+        elif tokens[x] == "INCLUDE":
+            if len(tokens) >= x+1:
+                x+=1
+                includes += str(f'#include "{tokens[x][4:]}>"')
+        elif tokens[x] == "HEADER:__THIS__":
+            isHeader = True
+        elif tokens[x] == "DEFINE":
+            if tokens[x+1][:14] == "WORD_FOR_WORD:":
+                defines+="#define "+tokens[x+1][14:]+"\n"
 
 
         if where == "inMaine" : maine+=code
         if where == "inFunc"  : funcs+=code
         x += 1
-    return str(includes+defines+funcs+maine+"}")
+    if isHeader:
+        includes = "#pragma once\n"+includes
+    returnValue = str(includes+defines+funcs)
+    if not isHeader:
+        returnValue+=maine+"}"
+    return returnValue#.replace(";", ";\n") # Uncomment to make code slightly more readable.

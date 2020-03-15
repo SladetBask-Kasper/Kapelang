@@ -1,10 +1,16 @@
 // This is a standard KapeLang Source file.
-
+import "string.h"
 print "Hello, World!"
+
+define ´DAMN "Daniel"´
+define ´KASBURGER "Resturant at 18 boardwalk avenue"´
+define ´aao "åäö"´
+
+//!!HEADER_FILE!!
 
 #myVar = -13 // idk this is a comment
 #name  = "Kape"
-#funcNum = 69
+#funnySexNumber = 69
 #called = "Lmao"
 
 func bool §myFunc : int #funcNum | string #called {
@@ -19,8 +25,25 @@ func bool §myFunc : int #funcNum | string #called {
         return False
     }
 }
+func bool §myFunc2 : int #funcNum | string #called {
+    fprint "This is function number #funcNum, also known as #called. That is \#epic"
+    if : #funcNum == 0 {
+        return True
+    } elif : #funcNum >= 0 {
+        return §myFunc : #funcNum-1 | #called
+    } elif : #funcNum <= 0 {
+        return §myFunc2 : #funcNum+1 | #called
+    } else {
+        return False
+    }
+}
+func bool §unusedFunc : int #none {
+    fprint "#none"
+    return True
+}
 
 §myFunc : #myVar | "This be my func"
 // Two ways of printing version.
 §printVersion
+//fprint "#called"
 fprint "#VER"

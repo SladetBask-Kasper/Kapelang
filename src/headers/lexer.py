@@ -4,6 +4,7 @@
 
 import string
 import headers.Types as Types
+from headers.trashCollector import trashCollector
 alphabet = list(string.ascii_lowercase)
 nums = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "-"]
 separators = list(";,.<>|@!?{([])}&%§")
@@ -20,6 +21,8 @@ def lexer(txt):
     inString  = False
     inArgs = False
     appender = ""
+    header = False
+    inWord = False
 
     for line in txt:
         if inArgs :
@@ -59,6 +62,19 @@ def lexer(txt):
                 else:
                     appender += " "+word
                 continue
+            elif inWord:
+                if "´" in word :
+                    lastCall = ""
+                    for char in list(word):
+                        if char == "´":
+                            inWord = False
+                            tokens.append(appender+" "+lastCall)
+                            appender=""
+                            break
+                        else:
+                            lastCall+=char
+                else :
+                    appender += " "+word
             elif word[0] == "\"":
                 # string.
                 inString = True
@@ -71,6 +87,13 @@ def lexer(txt):
             #================================
             #  Done With Strings from here.
             # ===============================
+            elif word[0] == "´":
+                inWord = True
+                appender = "WORD_FOR_WORD:"+word[1:]
+                if word[-1] == "´":
+                    inWord = False
+                    tokens.append(appender[:-1])
+                    appender=""
             elif word[0] == "§":
                 tokens.append("FUNC_NAME:"+word[1:])
                 continue
@@ -117,6 +140,11 @@ def lexer(txt):
             elif word == "elif": tokens.append("ELIF")
             elif word in comparative_operators: tokens.append("COMP:"+word)
             elif word in appendo_opperators: tokens.append("APP:"+(word).replace("and", "&&").replace("or", "||"))
-
-
-    return tokens
+            elif word == "import": tokens.append("IMPORT")
+            elif word == "include": tokens.append("INCLUDE")
+            elif word == "!!HEADER_FILE!!" :
+                tokens.append("HEADER:__THIS__")
+                header = True
+            elif word == "define" : tokens.append("DEFINE")
+    if header : return tokens
+    else : return trashCollector(tokens)
