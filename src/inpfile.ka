@@ -42,7 +42,7 @@ func bool §unusedFunc : int #none {
     return True
 }
 
-§myFunc : #myVar | "This be my func"
+//§myFunc : #myVar | "This be my func"
 // Two ways of printing version.
 §printVersion
 //fprint "#called"

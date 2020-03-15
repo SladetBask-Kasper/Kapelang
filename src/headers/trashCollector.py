@@ -40,21 +40,32 @@ def trashCollector(data, recur = 1):
                     counter = x+1
                     scopes = 0
                     usedInScope = 0
+                    inSeperateFunc = False
+                    funcScope = -1
                     while counter < len(tokens):
                         if scopes < 0:
                             break
                         item = tokens[counter]
-                        if item == currentVar:# or item == ("STR:"+currentVar[4:]):
+                        if inSeperateFunc:
+                            pass
+                        elif item == currentVar:# or item == ("STR:"+currentVar[4:]):
+                            usedInScope += 1
+                        elif item == "STR:#"+currentVar[4:]:
                             usedInScope += 1
                         if item == "ASSIGN_FUNC":
-                            pass
+                            inSeperateFunc = True
+                            funcScope = scopes
                         if item == "START_SCOPE":
                             scopes+=1
                         if item == "END_SCOPE":
                             scopes-=1
+                            if inSeperateFunc:
+                                if scopes == funcScope:
+                                    inSeperateFunc = False
+                                    funcScope = -1
                         counter += 1
-                    diff = tokens.count(currentVar)-usedInScope
-                    if diff > 1:
+                    #diff = tokens.count(currentVar)-usedInScope # This isn't valid for scopes.
+                    if usedInScope <= 0:
                         clean(x-1, x+1)
                         a = -1
         elif tokens[x] == "ASSIGN_FUNC":
