@@ -118,13 +118,18 @@ def parser(tokens):
         elif tokens[x] == "ASSIGNMENT":
             varName = tokens[x-1][4:]
             content = str(tokens[x+1])[4:]
-            types = str(tokens[x+1])[:3]
             t = "auto"
-            if types == "INT":
-                t = "int"
-            elif types == "STR":
-                t = "std::string"
-                content = str(f"\"{content}\"")
+            if str(tokens[x+1])[:5] == "CAST_":
+                t = "auto"
+                content = str(f"({datatype_translator(tokens[x+1])}) {tokens[x+2][4:]}")
+            else:
+                types = str(tokens[x+1])[:3]
+                if types == "INT":
+                    t = "int"
+                elif types == "STR":
+                    t = "std::string"
+                    content = str(f"\"{content}\"")
+
             code += str(f"{t} {varName} = {content};")
             x += 2-1
         elif tokens[x] == "ASSIGN_FUNC" :
@@ -261,7 +266,7 @@ def parser(tokens):
         elif tokens[x] == "IMPORT":
             if len(tokens) >= x+1:
                 x+=1
-                includes += str(f"#include <{tokens[x][4:]}>") # 4: because we expect a string.
+                includes += str(f"#include <{tokens[x][4:]}>\n") # 4: because we expect a string.
         elif tokens[x] == "INCLUDE":
             if len(tokens) >= x+1:
                 x+=1
@@ -271,6 +276,8 @@ def parser(tokens):
         elif tokens[x] == "DEFINE":
             if tokens[x+1][:14] == "WORD_FOR_WORD:":
                 defines+="#define "+tokens[x+1][14:]+"\n"
+        elif tokens[x][:5] == "CAST_":
+            code += str(f"({datatype_translator(tokens[x])})")
 
 
         if where == "inMaine" : maine+=code

@@ -3,8 +3,7 @@ includes = """#include <iostream>
 #include <stdio.h>
 """
 defines = """
-
-#define VER "0.2.5"
+#define VER "0.2.6"
 """
 funcs = """
 void printVersion() {
