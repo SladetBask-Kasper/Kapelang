@@ -103,6 +103,7 @@ def trashCollector(data, recur = 1):
                     if scopes < 0:
                         break
                     item = tokens[x+arg_len+1+code_len]
+                    #e(f"{len(tokens)} | {x+arg_len+code_len}")
                     if item == "START_SCOPE":
                         scopes+=1
                     elif item == "END_SCOPE":

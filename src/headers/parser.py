@@ -9,6 +9,12 @@ from headers.templates import maine
 from headers.lexer import alphabet
 from headers.lexer import nums
 
+def e(x):
+    idk = 0
+    instance = 0
+    idk += 1
+    print(f"[i{instance}, p{idk}] - {x}")
+
 #import headers.auto as Auto
 
 ###
@@ -187,10 +193,14 @@ def parser(tokens):
 
             funcName = tokens[x+a][10:]
             a+=1
+            if len(tokens) <= x+2:
+                a=0
             if tokens[x+a] == "ARG_RANGE":
                 a+=1
                 args = []
                 while not tokens[x+a] == "END_ARGS":
+                    if tokens[x+a] == "END_ARGS":
+                        break
                     item = tokens[x+a]
                     if item[:5] == "CAST_":
                         args.append(datatype_translator(item))
