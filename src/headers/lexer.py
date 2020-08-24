@@ -25,9 +25,9 @@ def lexer(txt):
     inWord = False
 
     for line in txt:
-        if inArgs :
-            inArgs = False
-            tokens.append("END_ARGS")
+        #if inArgs :
+        #    inArgs = False
+        #    tokens.append("END_ARGS")
         for word in line.split():
             if inString:
                 if "\"" in word:
@@ -146,5 +146,8 @@ def lexer(txt):
                 tokens.append("HEADER:__THIS__")
                 header = True
             elif word == "define" : tokens.append("DEFINE")
+        if inArgs :
+            inArgs = False
+            tokens.append("END_ARGS")
     if header : return tokens
     else : return trashCollector(tokens)

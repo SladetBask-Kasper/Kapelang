@@ -1,9 +1,5 @@
 // This is a standard KapeLang Source file.
 import "string.h"
-import "string.h"
-import "string.h"
-import "string.h"
-import "string.h"
 print "Hello, World!"
 
 define ´DAMN "Daniel"´
@@ -12,7 +8,7 @@ define ´aao "åäö"´
 
 //!!HEADER_FILE!!
 
-#myVar = -13 // idk this is a comment
+#myVar = 13 // idk this is a comment
 #name  = "Kape"
 #funnySexNumber = 69
 #called = "Lmao"
@@ -46,8 +42,8 @@ func bool §unusedFunc : int #none {
     return True
 }
 
-§myFunc : #myVar | "This be my func"
 // Two ways of printing version.
 §printVersion
 //fprint "#called"
 fprint "#VER"
+§myFunc : #myVar | "This be my func"

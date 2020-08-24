@@ -1,0 +1,16 @@
+ (01/28/2020 20:30:46) - Påbörjar projekt
+ (01/28/2020 20:49:54) - Vad ska variabler börja med? !, # eller @?
+ (01/28/2020 21:56:45) - Kommentarer fungerar nu!
+ (01/29/2020 09:37:57) - Nu fungerar print!
+ (01/29/2020 21:14:23) - Nu fungerar det att printa variabler genom fprint. Variable dekleration har fungerat sedan imorse
+ (01/29/2020 21:19:02) - Notera även hur filuppdelningen har fungerat! Det finns inte ett ställe som jag inte kan skriva om för sig där hela programmet måste ryka! Slipper jag starta om hela skiten!
+ (02/04/2020 12:28:58) - Började skriva om lexer.py för ~30 min sedan
+ (02/05/2020 10:26:14) - Klar med lexer förnyningen
+ (03/13/2020 12:03:01) - Funktions deklaration fungerar men det går fortfarande ej att kalla funktioner
+ (03/13/2020 16:04:23) - Nu fungerar function calls och vid \# blir det inga warnings som förut.
+ (03/13/2020 18:11:13) - Nu fungerar If-satser och därmed även recursion
+ (03/13/2020 19:15:25) - Python Vs KapeLang : Kape kunde köra ett program på 0,002 sec medan python kunde köra lika program på 0,020 sec
+ (03/15/2020 11:43:48) - En TrashCollector.py och #defines har blivigt tillagda
+ (03/17/2020 11:43:48) - Nu fungerar TrashCollectorn bättre. Ett test mellan två med mening dåligt programmerade filer så fick mitt språk 9KB filstorlek och samma fil med c++ blev 161 KB i filstorlek. Detta betyder att mitt språk är 17.888... gånger bättre.
+ (03/18/2020 09:10:46) - ett problem upptäcktes igår med trashcollectorn där den tog bort en function som användes
+ (03/18/2020 09:59:35) - Felet var redan fixat. Jag ändrade == till >=

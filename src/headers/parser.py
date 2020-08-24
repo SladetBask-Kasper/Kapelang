@@ -236,7 +236,11 @@ def parser(tokens):
                 code += str(funcName+"();")
         elif tokens[x] == "RETURN":
             if len(tokens) >= x+1:
-                code += "return "
+                if tokens[x+1][:4] == "VAR:":
+                    code += str(f"return {tokens[x+1][4:]};")
+                elif tokens[x+1] == "END_SCOPE":
+                    code += "return;"
+                else : code += "return "
             else:
                 code += "return;"
         elif tokens[x] == "IF" or tokens[x] == "ELIF":
@@ -276,8 +280,11 @@ def parser(tokens):
         elif tokens[x] == "DEFINE":
             if tokens[x+1][:14] == "WORD_FOR_WORD:":
                 defines+="#define "+tokens[x+1][14:]+"\n"
+                x+=1
         elif tokens[x][:5] == "CAST_":
             code += str(f"({datatype_translator(tokens[x])})")
+        elif tokens[x][:14] == "WORD_FOR_WORD:":
+            code += tokens[x][14:]
 
 
         if where == "inMaine" : maine+=code
@@ -287,5 +294,5 @@ def parser(tokens):
         includes = "#pragma once\n"+includes
     returnValue = str(includes+defines+funcs)
     if not isHeader:
-        returnValue+=maine+"}"
+        returnValue+=maine+"return 0;}"
     return returnValue#.replace(";", ";\n") # Uncomment to make code slightly more readable.

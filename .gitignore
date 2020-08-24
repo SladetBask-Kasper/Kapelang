@@ -1,9 +1,5 @@
 *.pl
 *.exe
-*.log
 *.out
-logs
 __pycache__
 *.pyc
-*.cpp
-auto.py

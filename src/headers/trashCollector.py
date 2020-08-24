@@ -17,6 +17,7 @@ def clean(start, finish):
 
 def trashCollector(data, recur = 1):
     global instance
+    instance+=1
     if len(data)<5:
         return data# too small program to bother running in to uneccessary errors.
     global tokens
@@ -30,7 +31,6 @@ def trashCollector(data, recur = 1):
         a = 1
 
         if tokens[x] == "ASSIGNMENT":
-            instance += 1
             if tokens[x-1][:4] == "VAR:":
                 if not tokens.count(tokens[x-1]) > 1:
                     clean(x-1, x+1)
@@ -88,7 +88,8 @@ def trashCollector(data, recur = 1):
                     elif tokens[i] == "END_SCOPE":
                         scopes-=1
                 diff = tokens.count(tokens[x+2])-usedInFunc
-                if diff > 1:
+                if diff >= 1: # this used to be diff > 1,
+                    # I belive it didn't use to work with >= but now it does.
                     x += 2
                     continue
             # ====================================================== #
@@ -103,7 +104,6 @@ def trashCollector(data, recur = 1):
                     if scopes < 0:
                         break
                     item = tokens[x+arg_len+1+code_len]
-                    #e(f"{len(tokens)} | {x+arg_len+code_len}")
                     if item == "START_SCOPE":
                         scopes+=1
                     elif item == "END_SCOPE":
