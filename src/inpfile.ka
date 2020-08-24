@@ -25,6 +25,9 @@ func bool §myFunc : int #funcNum | string #called {
         return False
     }
 }
+///
+/// This is a useless function that will be removed by trashCollector.
+///
 func bool §myFunc2 : int #funcNum | string #called {
     fprint "This is function number #funcNum, also known as #called. That is \#epic"
     if : #funcNum == 0 {
@@ -32,7 +35,7 @@ func bool §myFunc2 : int #funcNum | string #called {
     } elif : #funcNum >= 0 {
         return §myFunc : #funcNum-1 | #called
     } elif : #funcNum <= 0 {
-        return §myFunc2 : #funcNum+1 | #called
+        return §myFunc : #funcNum+1 | #called
     } else {
         return False
     }
@@ -43,7 +46,7 @@ func bool §unusedFunc : int #none {
 }
 
 // Two ways of printing version.
-§printVersion
+§printVersion // This is kinda a useless function.
 //fprint "#called"
 fprint "#VER"
 §myFunc : #myVar | "This be my func"

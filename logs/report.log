@@ -14,3 +14,5 @@
  (03/17/2020 11:43:48) - Nu fungerar TrashCollectorn bättre. Ett test mellan två med mening dåligt programmerade filer så fick mitt språk 9KB filstorlek och samma fil med c++ blev 161 KB i filstorlek. Detta betyder att mitt språk är 17.888... gånger bättre.
  (03/18/2020 09:10:46) - ett problem upptäcktes igår med trashcollectorn där den tog bort en function som användes
  (03/18/2020 09:59:35) - Felet var redan fixat. Jag ändrade == till >=
+ (08/24/2020 12:11:27) - Jag måste fixa så att functioner löser problem mer än att repitera kod
+ (08/24/2020 12:11:48) - Jag måste fixa så klasser fungerar
