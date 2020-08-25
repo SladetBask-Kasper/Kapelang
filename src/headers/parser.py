@@ -8,6 +8,7 @@ from headers.templates import funcs
 from headers.templates import maine
 from headers.lexer import alphabet
 from headers.lexer import nums
+from headers.toolbox import *
 
 def e(x):
     idk = 0
@@ -15,53 +16,7 @@ def e(x):
     idk += 1
     print(f"[i{instance}, p{idk}] - {x}")
 
-#import headers.auto as Auto
-
-###
-### Translates token datatypes into c++ code datatypes.
-### If no datatype is found it returns original value.
-###
-def datatype_translator(datatype = "CAST_INT"):
-    # ======= START OF TYPES ======= #
-    if datatype == "CAST_BOOL":
-        return "bool"
-    elif datatype == "CAST_CSTR":
-        return "char*"
-    elif datatype == "CAST_INT":
-        return "int"
-    elif datatype == "CAST_STR":
-        return "std::string"
-    elif datatype == "CAST_L":
-        return "long"
-    elif datatype == "CAST_F":
-        return "float"
-    elif datatype == "CAST_D":
-        return "double"
-    else:
-        return datatype
-    # ======= END OF TYPES ======= #
-
-def datatype_to_c(data):
-    if data[:4] == "STR:":
-        return str(f"(std::string) \"{data[4:]}\"")
-    elif data[:4] == "INT:":
-        return str(f"(int) {data[4:]}")
-    elif data[:5] == "LONG:":
-        return str(f"(long) {data[5:]}")
-    elif data[:5] == "CSTR:":
-        return str(f"(char*) \"{data[5:]}\"")
-    elif data[:5] == "BOOL:":
-        frlse = "false" # True + False = Frlse
-        if data[5:] == "TRUE":
-            frlse = "true"
-        else: frlse = "false"
-        return str(f"(bool) {frlse}")
-    elif data[:4] == "VAR:":
-        return str(f"{data[4:]}")
-    elif data[:10] == "FUNC_NAME:":
-            return str(f"{data[10:]}()")
-    else:
-        return data
+#import headers.auto as Auto # old toolbox
 
 def parser(tokens):
     global includes
@@ -76,10 +31,7 @@ def parser(tokens):
     while x < len(tokens):
         code = ""
         if tokens[x] == "PRINT":
-            word = ""
-            if str(tokens[x+1])[:4] == "STR:":
-                word = str(tokens[x+1])[4:]
-            code += str(f"std::cout << \"{word}\" << std::endl;")
+            code += str(f"std::cout << {trans(tokens[x+1])} << std::endl;")
             x += 1
         elif tokens[x] == "PRINTF":
             word = ""
