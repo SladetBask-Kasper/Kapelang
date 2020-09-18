@@ -1,7 +1,11 @@
 ﻿// PsudoKNN.cpp : Defines the entry point for the application.
+// I'm not quite sure KNN.h is working as intended. But it does
+// give me an accuracy which is close to what KNN would give in
+// for example python so it seems to work but I'm not so sure.
+// This file is used for testing purposes
 //
 
-#include "PsudoKNN.h"
+#include "common.h"
 #include "KNN.h"
 #include "basics.h"
 #include "iris.h"

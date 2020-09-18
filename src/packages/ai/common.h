@@ -1,5 +1,3 @@
-﻿// PsudoKNN.h : Include file for standard system include files,
-// or project specific include files.
 
 #pragma once
 #include <iostream>
@@ -16,7 +14,7 @@ float accuracy_score(std::vector<int> labels, std::vector<int> predicts)
 	}
 
 	int diff = big.size()-small.size();//number of differing items.
-	
+
 	for (int i = 0; i < small.size();i++)
 	{
 		cout << "IF BIG[" << big[i] << "] != SMALL[" << small[i] << "] ";
@@ -27,8 +25,6 @@ float accuracy_score(std::vector<int> labels, std::vector<int> predicts)
 		}
 		else
 			cout << "FALSE" << endl;
-		//if (big[i] != small[i])
-		//	diff++;
 	}
 
 	return 1.0f-((float) ((double)diff/(double)big.size()));
@@ -88,7 +84,7 @@ def train_test_split(dataset, split=0.60):
 // test_size : self explain'th
 // </ARGS>
 //
-void train_test_split(std::vector<std::vector<double>>& X_train, 
+void train_test_split(std::vector<std::vector<double>>& X_train,
 	std::vector<std::vector<double>> & X_test, std::vector<int> &y_train, std::vector<int> & y_test,
 	float test_size=0.5)
 {
@@ -96,7 +92,7 @@ void train_test_split(std::vector<std::vector<double>>& X_train,
 	int train_size = (int)(test_size * vecsize(X_test));
 	while (vecsize(X_train) < train_size)
 	{
-		
+
 		int index = rand() % (vecsize(X_test));
 		X_train.push_back(pop(X_test, index));
 		y_train.push_back(pop(y_test, index));
@@ -113,4 +109,3 @@ void train_test_split(std::vector<std::vector<double>>& X_train,
 	X_test = tmp_X;
 	y_test = tmp_y;
 }
-

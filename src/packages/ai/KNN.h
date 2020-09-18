@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <vector>
 #include <functional>
+#include <cmath>
 
 using namespace std;
 class KNN
@@ -35,7 +36,7 @@ public:
 private:
 	vector<vector<double>> dX_train = {};
 	vector<int> ny_train;
-	
+
 	// Computes the distance between two std::vectors
 	// SOURCE : http://www.cplusplus.com/forum/general/209784/
 	template <typename T>
