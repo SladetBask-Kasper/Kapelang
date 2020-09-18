@@ -57,15 +57,7 @@ def datatype_to_c(data):
             return rv+"()"
     else:
         return data
-"""
-def trans(data):
-    if len(data) <= 5:
-        return data
-    elif data[:5] == "CAST_":
-        return datatype_translator(data)
-    else:
-        return datatype_to_c(data)
-"""
+
 def trans(data):
     do_nothing_types = ["INT:", "VAR:", "LONG:", "BOOL:", "FLOAT:",
         "DOUBLE:"]
@@ -78,7 +70,7 @@ def trans(data):
     elif len(data) <= 5: # ===========
         return data
     elif data[:5] in do_nothing_types:
-        if data[:5] == "BOOL":
+        if data[:5] == "BOOL:":
             return data[5:].lower()
         return data[5:]
     elif len(data) > 7:

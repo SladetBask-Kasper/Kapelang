@@ -10,6 +10,11 @@ void printVersion() {
 using namespace std;
 cout << "VERSION:" << VER << endl;
 return;}\n
+void error(const char *msg)
+{
+    perror(msg);
+    exit(1);
+}\n
 """
 maine = """
 int main(int argc, char const *argv[]) {
