@@ -281,7 +281,7 @@ def parser(tokens):
         elif tokens[x] == "INCLUDE":
             if len(tokens) >= x+1:
                 x+=1
-                includes += str(f'#include "{packages+(tokens[x][4:])}.h"')
+                includes += str(f'#include "{packages+(tokens[x][4:])}.h"\n')
         elif tokens[x] == "HEADER:__THIS__":
             isHeader = True
         elif tokens[x] == "DEFINE":
