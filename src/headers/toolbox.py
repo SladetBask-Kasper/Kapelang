@@ -28,6 +28,8 @@ def datatype_translator(datatype = "CAST_INT"):
         return "float"
     elif datatype == "CAST_D":
         return "double"
+    elif datatype == "CAST_VOID":
+        return "void"
     else:
         return datatype
     # ======= END OF TYPES ======= #
@@ -73,7 +75,10 @@ def trans(data):
         if data[:5] == "BOOL:":
             return data[5:].lower()
         return data[5:]
-    elif len(data) > 7:
-        return data[7:]
+    elif len(data) >= len("FUNC_NAME:"):
+        if data[:10] == "FUNC_NAME:":
+            return data[10:]+"()"
+    elif len(data) > 10:
+        return data[10:]
     else:
         return data

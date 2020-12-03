@@ -33,8 +33,9 @@ def trashCollector(data, recur = 1):
         if tokens[x] == "ASSIGNMENT":
             if tokens[x-1][:4] == "VAR:":
                 if not tokens.count(tokens[x-1]) > 1:
-                    clean(x-1, x+1)
-                    a = -1 # we remove -1 and a couple above so we will rescan from that point
+                    if not tokens.count("§"+tokens[x-1]+".") <= 0 and tokens.count("#"+tokens[x-1]+".") <= 0:# check classes
+                        clean(x-1, x+1)
+                        a = -1 # we remove -1 and a couple above so we will rescan from that point
                 else:
                     currentVar = tokens[x-1]
                     counter = x+1
@@ -69,7 +70,7 @@ def trashCollector(data, recur = 1):
                         clean(x-1, x+1)
                         a = -1
         elif tokens[x] == "ASSIGN_FUNC":
-            if tokens.count(tokens[x+2]) > 1:
+            if tokens.count(tokens[x+2]) > 1 or tokens.count("VAR:" + tokens[x+2][10:]) >= 1:
                 i = x+10
                 fname = tokens[x+2]
                 usedInFunc = 0

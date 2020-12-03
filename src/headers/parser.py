@@ -6,6 +6,8 @@ from headers.templates import includes
 from headers.templates import defines
 from headers.templates import funcs
 from headers.templates import maine
+from headers.templates import packages
+from headers.templates import globals
 from headers.lexer import alphabet
 from headers.lexer import nums
 from headers.toolbox import *
@@ -23,6 +25,7 @@ def parser(tokens):
     global defines
     global funcs
     global maine
+    global globals
 
     x = 0
     where = "inMaine"
@@ -72,8 +75,25 @@ def parser(tokens):
             content = str(tokens[x+1])[4:]
             t = "auto"
             if str(tokens[x+1])[:5] == "CAST_":
-                t = "auto"
-                content = str(f"({datatype_translator(tokens[x+1])}) {tokens[x+2][4:]}")
+                t = datatype_translator(tokens[x+1])
+                newContent = tokens[x+2]
+                a = 0
+                if (len(newContent) >= 5 and newContent[:5] == "FUNC_"):
+                    newContent = tokens[x+2][10:]
+                    a = 3
+                    arguments = "("
+                    if tokens[x+a] == "ARG_RANGE":
+                        a+=1
+                        while not tokens[x+a] == 'END_ARGS':
+                            arguments += datatype_to_c(tokens[x+a]) + ", "
+                            a+=1
+                        arguments = arguments[:-2]
+                    arguments += ")"
+                    newContent += arguments
+                else:
+                    newContent = newContent[4:]
+                content = str(f"({t}) {newContent}")
+                x+=a
             else:
                 types = str(tokens[x+1])[:3]
                 if types == "INT":
@@ -81,6 +101,26 @@ def parser(tokens):
                 elif types == "STR":
                     t = "std::string"
                     content = str(f"\"{content}\"")
+                elif types == "FUN":
+                    t = str(tokens[x+1])[10:]
+                    argl = ""
+                    if tokens[x+2] == "ARG_RANGE":
+                        more = True
+                        count = 0
+                        while more:
+                            count += 1
+                            index = count + (x+2)
+                            if tokens[index] == "NEXT":
+                                continue
+                            elif tokens[index] == "END_ARGS":
+                                more = False
+                                break
+                            else:
+                                argl += datatype_to_c(tokens[index])+", "
+                    argl = argl.strip()
+                    if len(argl) > 0 and (argl[-1] == ","):
+                        argl = argl[:-1]
+                    content = t + f"({argl})"
 
             code += str(f"{t} {varName} = {content};")
             x += 2-1
@@ -111,6 +151,9 @@ def parser(tokens):
                     args.append(",")
                 elif item[:4] == "VAR:":
                     args.append(item[4:])
+                elif len(item) >= 10 and item[:10] == "FUNC_NAME:":
+                    # if so it's a class
+                    args.append(item[10:])
                 a+=1
             if args[-1:] == ",":
                 args = args[:-1]
@@ -197,7 +240,9 @@ def parser(tokens):
                 code += "return;"
         elif tokens[x] == "IF" or tokens[x] == "ELIF":
             command = "yeet"
-            if tokens[x] == "IF":
+            if tokens[x] == "WHILE":
+                command = "while"
+            elif tokens[x] == "IF":
                 command = "if"
             else :
                 command = "else if"
@@ -219,6 +264,16 @@ def parser(tokens):
         elif tokens[x] == "ELSE":
             code += "else"
             inIf += 1
+        elif tokens[x] == "DEC_GLOBAL":
+            type = datatype_translator(tokens[x+1])
+            name = datatype_to_c(tokens[x+2])
+            assignmentType = tokens[x+3]
+            #dataType = str(tokens[x+4])[:3]
+            data = datatype_to_c(tokens[x+4])
+            globals += f"{type} {name} = {data};\n"
+            x+=4
+
+
         elif tokens[x] == "IMPORT":
             if len(tokens) >= x+1:
                 x+=1
@@ -226,7 +281,7 @@ def parser(tokens):
         elif tokens[x] == "INCLUDE":
             if len(tokens) >= x+1:
                 x+=1
-                includes += str(f'#include "{tokens[x][4:]}>"')
+                includes += str(f'#include "{packages+(tokens[x][4:])}.h"')
         elif tokens[x] == "HEADER:__THIS__":
             isHeader = True
         elif tokens[x] == "DEFINE":
@@ -239,12 +294,13 @@ def parser(tokens):
             code += tokens[x][14:]
 
 
+
         if where == "inMaine" : maine+=code
         if where == "inFunc"  : funcs+=code
         x += 1
     if isHeader:
         includes = "#pragma once\n"+includes
-    returnValue = str(includes+defines+funcs)
+    returnValue = str(includes+defines+globals+funcs)
     if not isHeader:
         returnValue+=maine+"return 0;}"
     return returnValue#.replace(";", ";\n") # Uncomment to make code slightly more readable.

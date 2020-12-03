@@ -32,7 +32,8 @@ if __name__ == "__main__":
         print(lex)
     elif arg == "SHOWPAR" or arg == "SHOWPARSE" or arg == "PARSE" or arg == "PAR":
         par = parser.parser(lex).replace("\#", "#")
-        print(par)
+        print(par.replace(";", ";\n"))
+        #print(par)
     elif arg == "NEUTRAL" or arg == "NEU":
         par = parser.parser(lex)
         print("DONE.")

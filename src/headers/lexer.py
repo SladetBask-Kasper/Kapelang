@@ -128,16 +128,19 @@ def lexer(txt):
             elif word == "signed": tokens.append("CAST_SIGNED")
             elif word == "cstr": tokens.append("CAST_CSTR")
             elif word == "bool": tokens.append("CAST_BOOL")
+            elif word == "void": tokens.append("CAST_VOID")
             # ========================================================
             # </CASTS>                                               #
             # ========================================================
+            elif word == "global": tokens.append("DEC_GLOBAL")
             elif word == "|": tokens.append("NEXT")
             elif word == "return": tokens.append("RETURN")
-            elif word == "True": tokens.append("BOOL:TRUE")
-            elif word == "False": tokens.append("BOOL:FALSE")
+            elif word.lower() == "true": tokens.append("BOOL:TRUE")
+            elif word.lower() == "false": tokens.append("BOOL:FALSE")
             elif word == "if": tokens.append("IF")
             elif word == "else": tokens.append("ELSE")
             elif word == "elif": tokens.append("ELIF")
+            elif word == "while": tokens.append("WHILE")
             elif word in comparative_operators: tokens.append("COMP:"+word)
             elif word in appendo_opperators: tokens.append("APP:"+(word).replace("and", "&&").replace("or", "||"))
             elif word == "import": tokens.append("IMPORT")
