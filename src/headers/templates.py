@@ -17,9 +17,7 @@ std::string input(std::string txt = "")
 \tstd::string rv;\tstd::cin >> rv;\treturn rv;}
 void error(const char *msg)
 {
-    perror(msg);
-    exit(1);
-}\n
+    perror(msg);    exit(1);}
 """
 maine = """
 int main(int argc, char const *argv[]) {

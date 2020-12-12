@@ -37,6 +37,7 @@ def parser(tokens):
             code += str(f"std::cout << {trans(tokens[x+1])} << std::endl;")
             x += 1
         elif tokens[x] == "PRINTF":
+            #print("Entered printf")
             word = ""
             varName = ""
             if str(tokens[x+1])[:4] == "STR:":
@@ -85,7 +86,10 @@ def parser(tokens):
                     if tokens[x+a] == "ARG_RANGE":
                         a+=1
                         while not tokens[x+a] == 'END_ARGS':
-                            arguments += datatype_to_c(tokens[x+a]) + ", "
+                            if tokens[x+a] == "NEXT":
+                                pass
+                            else:
+                                arguments += datatype_to_c(tokens[x+a]) + ", "
                             a+=1
                         arguments = arguments[:-2]
                     arguments += ")"
@@ -93,7 +97,7 @@ def parser(tokens):
                 else:
                     newContent = newContent[4:]
                 content = str(f"({t}) {newContent}")
-                x+=a
+                x+=a-1
             else:
                 types = str(tokens[x+1])[:3]
                 if types == "INT":

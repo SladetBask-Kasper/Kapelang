@@ -17,17 +17,22 @@ float accuracy_score(std::vector<int> labels, std::vector<int> predicts)
 
 	for (int i = 0; i < small.size();i++)
 	{
-		cout << "IF BIG[" << big[i] << "] != SMALL[" << small[i] << "] ";
+		//cout << "IF BIG[" << big[i] << "] != SMALL[" << small[i] << "] ";
 		if (big[i] != small[i])
 		{
 			diff++;
-			cout << "TRUE" << endl;
+			//cout << "TRUE" << endl;
 		}
-		else
-			cout << "FALSE" << endl;
+		/*else
+			cout << "FALSE" << endl;*/
 	}
 
-	return 1.0f-((float) ((double)diff/(double)big.size()));
+	//return 1.0f-((float) ((double)diff/(double)big.size()));
+	return ((float) ((double)diff/(double)big.size()));
+}
+
+std::string percent(float x) {
+	return std::to_string(x*100).substr(0,4) + ((std::string) "%");
 }
 
 int vecsize(std::vector<std::vector<double>>& vec)

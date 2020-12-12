@@ -104,7 +104,7 @@ def lexer(txt):
                 # integer.
                 tokens.append("INT:"+word)
             elif word == "print":tokens.append("PRINT")
-            elif word == "fprint":tokens.append("PRINTF")
+            elif word == "fprint" or word == "printf":tokens.append("PRINTF")
             elif word == "=":tokens.append("ASSIGNMENT")
             elif word == "func":tokens.append("ASSIGN_FUNC")
             elif word == "}":tokens.append("END_SCOPE")
@@ -129,6 +129,7 @@ def lexer(txt):
             elif word == "cstr": tokens.append("CAST_CSTR")
             elif word == "bool": tokens.append("CAST_BOOL")
             elif word == "void": tokens.append("CAST_VOID")
+            elif word[:5] == "list<": tokens.append("CAST_V:"+str(word[4:]))
             # ========================================================
             # </CASTS>                                               #
             # ========================================================

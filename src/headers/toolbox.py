@@ -30,6 +30,8 @@ def datatype_translator(datatype = "CAST_INT"):
         return "double"
     elif datatype == "CAST_VOID":
         return "void"
+    elif datatype[:6] == "CAST_V":
+        return "std::vector" + datatype[7:]
     else:
         return datatype
     # ======= END OF TYPES ======= #
