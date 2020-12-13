@@ -16,3 +16,4 @@
  (03/18/2020 09:59:35) - Felet var redan fixat. Jag ändrade == till >=
  (08/24/2020 12:11:27) - Jag måste fixa så att functioner löser problem mer än att repitera kod
  (08/24/2020 12:11:48) - Jag måste fixa så klasser fungerar
+ (12/13/2020 15:47:25) - För ett par dagara sedan så fixade jag så det går att göra t.ex. x = funktion. Det var så klasser hanterades förut ifall man vill göra en instans av en klass. Det jag menade med föra logg entry:t är fortfarande inte addresserat. Jag löste i alla fall klass/metod konflikten genom att göra så man behöver specificera vilken datatyp funktionen retunerar, annars kommer den kalla klass konstruktorn.
