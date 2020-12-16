@@ -1,0 +1,14 @@
+include "ai/KNN"
+include "ai/iris_split"
+include "ai/common"
+
+// Create classifier.
+#clf = §KNN
+§clf.fit : #X_train | #y_train
+
+#predictions = list<int> §clf.predict : #X_test
+
+#accuracy = float §accuracy_score : #y_test | #predictions
+#pc = string §percent : #accuracy
+
+printf "Accuracy : #pc"

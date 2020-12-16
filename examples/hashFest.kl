@@ -1,0 +1,16 @@
+include "cryptography/md5"
+include "cryptography/sha1"
+include "cryptography/sha256"
+include "cryptography/sha512"
+
+#testItem = "grape"
+
+#x1 = string §md5 : #testItem
+#x2 = string §sha1 : #testItem
+#x3 = string §sha256 : #testItem
+#x4 = string §sha512 : #testItem
+
+printf "#testItem in md5    : #x1"
+printf "#testItem in sha1   : #x2"
+printf "#testItem in sha256 : #x3"
+printf "#testItem in sha512 : #x4"
