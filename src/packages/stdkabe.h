@@ -3,9 +3,9 @@
 #include "String.h"
 // there is also "FileReader.h" and "dict.h" but I don't see that as a necessary datatype to import now, but the user may choose to do it later.
 #include <stdint.h>
+#include <boost/lexical_cast.hpp>
 //#include <io.h> //#include <fcntl.h> // don't know when or why I added these two but the program works without them so...
-//using kabe::string;
-//using kabe::FileReader;
+
 
 #define u8 uint8_t
 #define u16 uint16_t
@@ -36,10 +36,21 @@
 #define HAS_KABE_TYPE_PACKAGE
 #endif // HAS_KABE_TYPE_PACKAGE
 
-kabe::string input(kabe::string txt = "")
+template <typename T_Input>
+T_Input tinput(const kabe::string& prompt)
 {
-	std::cout << txt;
-	std::string rv;
-	std::cin >> rv;
-	return rv;
+	std::string line{};
+	std::cout << prompt;
+	if (!std::getline(std::cin, line))
+		throw std::istream::failure{ "I/O error" };
+	return boost::lexical_cast<T_Input>(line);
+}
+
+kabe::string input(kabe::string prompt = "")
+{
+	std::string line{};
+	std::cout << prompt;
+	if (!std::getline(std::cin, line))
+		throw std::istream::failure{ "I/O error" };
+	return line;
 }
