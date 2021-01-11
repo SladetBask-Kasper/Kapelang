@@ -105,7 +105,7 @@ def parser(tokens):
                 if types == "INT":
                     t = "int"
                 elif types == "STR":
-                    t = "std::string"
+                    t = "kabe::string"
                     content = str(f"\"{content}\"")
                 elif types == "FUN":
                     t = str(tokens[x+1])[10:]

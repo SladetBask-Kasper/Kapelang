@@ -14,3 +14,4 @@ maine = """
 int main(int argc, char const *argv[]) {
 """
 packages = "/home/kada1004/pro/Kapelang/src/packages/"
+src_path = "/home/kada1004/pro/Kapelang/src/"
