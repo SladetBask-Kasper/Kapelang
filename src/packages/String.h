@@ -1,12 +1,12 @@
 /*
-    This is a file with a class for kabe::strings in c++ and kabe/kape -lang. 
+    This is a file with a class for kabe::strings in c++ and kabe/kape -lang.
     I am not quite sure if I want to use this since it is kinda worsening the problems it is trying to solve.
-    By that I mean, I sorta wanted a "catch-all" string to my programming language so you'll never need to deal 
+    By that I mean, I sorta wanted a "catch-all" string to my programming language so you'll never need to deal
     with c string / std string conversion, but in trying to fix that I essentially just made everything worse.
     Because now we have c string / std string / kabe string conversion to worry about, which is quite bad.
-    It also seems to be difficult dealing with arrays and conversion between for example 
+    It also seems to be difficult dealing with arrays and conversion between for example
     std::vector<std::string> and std::vector<kabe::string>, and I could fix that by making for example
-    a list class which inherits std::vector but would'n that just move the problem?
+    a list class which inherits std::vector but wouldn't that just move the problem?
 
 */
 
@@ -16,16 +16,11 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
+#include <boost/algorithm/string.hpp>
 
 namespace kabe {
     class string : public std::string
     {
-    private:
-        // source: https://stackoverflow.com/a/217605
-        // trim from start (in place)
-        static inline void _ltrim(std::string& s) { s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {return !std::isspace(ch); })); }
-        // trim from end (in place)
-        static inline void _rtrim(std::string& s) { s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {return !std::isspace(ch); }).base(), s.end()); }
     public:
         using std::string::string;
         string(std::string x) {
@@ -34,9 +29,9 @@ namespace kabe {
         string(char x) { // idk why you can't already assign char to std::string, but here's a constructor for that anyways
             this->assign((char*)&x);
         }
-        string(int x) {this->assign(std::to_string(x));}
-        string(float x) {this->assign(std::to_string(x));}
-        string(double x) {this->assign(std::to_string(x));}
+        string(int x) { this->assign(std::to_string(x)); }
+        string(float x) { this->assign(std::to_string(x)); }
+        string(double x) { this->assign(std::to_string(x)); }
         string(bool x) {
             if (x == true) this->assign("true");
             else this->assign("false");
@@ -56,8 +51,7 @@ namespace kabe {
         /// <returns>kabe::string copy with heading and tailing whitespace removed</returns>
         string strip() {
             std::string str = this->std_str();
-            _ltrim(str);
-            _rtrim(str);
+            boost::algorithm::trim(str);
             return string(str);
         }
 
@@ -87,16 +81,43 @@ namespace kabe {
             return string(str);
         }
 
+        string substring(int opt1, int opt2) {
+            std::string value = this->std_str();
+            int diff = 0;
+            {
+                int big = opt1;
+                int small = opt2;
+                if (opt1 < opt2) {
+                    big = opt2;
+                    small = opt1;
+                }
+                diff = big - small;
+            }
+            return value.substr(opt1, diff);
+        }
+
+        // Really this class should use s32 instead of int
+        string manipulate(int opt1 = 0, int opt2 = 0) {
+            string value = this->std_str();
+            if (opt1 > opt2) {
+                if (opt2 == 0) {
+                    opt2 = value.length();
+                }
+            }
+            if (opt1 < 0) opt1 = value.length() - (-opt1);
+            if (opt2 < 0) opt2 = value.length() - (-opt2);
+            return value.substring(opt1, opt2);
+        }
+
         string upper() {
-            // Quite common exception. Preferably we would use boost, but this will do for now.
-            std::string str = this->replace("ß", "SS").std_str();
-            //boost::to_upper(str);
-            std::transform(str.begin(), str.end(), str.begin(), ::toupper);
+            std::string str = this->replace("ÃŸ", "SS").std_str();
+            //std::string str = this->std_str();
+            boost::to_upper(str);
             return string(str);
         }
         string lower() {
             std::string str = this->std_str();
-            std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+            boost::to_lower(str);
             return string(str);
         }
 
