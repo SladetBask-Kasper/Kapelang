@@ -21,13 +21,29 @@ def datatype_translator(datatype = "CAST_INT"):
     elif datatype == "CAST_INT":
         return "int"
     elif datatype == "CAST_STR":
-        return "std::string"
+        return "kabe::string"
     elif datatype == "CAST_L":
         return "long"
     elif datatype == "CAST_F":
         return "float"
     elif datatype == "CAST_D":
         return "double"
+    elif datatype == "CAST_U8":
+        return "u8"
+    elif datatype == "CAST_S8":
+        return "s8"
+    elif datatype == "CAST_U16":
+        return "u16"
+    elif datatype == "CAST_S16":
+        return "s16"
+    elif datatype == "CAST_U32":
+        return "u32"
+    elif datatype == "CAST_S32":
+        return "s32"
+    elif datatype == "CAST_U32":
+        return "u32"
+    elif datatype == "CAST_S32":
+        return "s32"
     elif datatype == "CAST_VOID":
         return "void"
     elif datatype[:6] == "CAST_V":
@@ -38,7 +54,7 @@ def datatype_translator(datatype = "CAST_INT"):
 
 def datatype_to_c(data):
     if data[:4] == "STR:":
-        return str(f"(std::string) \"{data[4:]}\"")
+        return str(f"(kabe::string) \"{data[4:]}\"")
     elif data[:4] == "INT:":
         return str(f"(int) {data[4:]}")
     elif data[:5] == "LONG:":

@@ -31,6 +31,8 @@ def parser(tokens):
     where = "inMaine"
     inIf = 0
     isHeader = False
+    useKabeTypes = True
+
     while x < len(tokens):
         code = ""
         if tokens[x] == "PRINT":
@@ -97,7 +99,7 @@ def parser(tokens):
                 else:
                     newContent = newContent[4:]
                 content = str(f"({t}) {newContent}")
-                x+=a-1
+                x+=a-2 #when this was at -1 I had a problem in the file hasher example with print.
             else:
                 types = str(tokens[x+1])[:3]
                 if types == "INT":
@@ -186,7 +188,7 @@ def parser(tokens):
                 x += 1
                 continue
         elif tokens[x][:5] == "BOOL:":
-            code += datatype_to_c(tokens[x])+";" # NOTE : THIS ; DOESN'T SOLVE ANYTHING.
+            code += datatype_to_c(tokens[x])+";" # NOTE : THIS DOESN'T SOLVE ANYTHING.
                                                  # For now make sure bools that aren't at
                                                  # The end of line are captured by the
                                                  # Token prior.
@@ -217,19 +219,23 @@ def parser(tokens):
                     a+=1
                 if args[-1:] == ",":
                     args = args[:-1]
+                    a-=1
                 funcArgs = "("
                 for i in args :
                     if i == ",":
                         if funcArgs[-1:] == " ":
                             funcArgs = funcArgs[:-1]
-
+                            a-=1
                     funcArgs+=i+" "
                 if funcArgs[-1:] == " ":
                     funcArgs = funcArgs[:-1]
+                    a-=1
                 if funcArgs[-1:] == ",":
                     funcArgs = funcArgs[:-1]
+                    a-=1
                 funcArgs += ")"
-                x += a-1
+                #x += a-1 # minus should be applied at appropriate place
+                x += a
                 code += str(funcName+funcArgs+";")
             else:
                 code += str(funcName+"();")
@@ -277,7 +283,10 @@ def parser(tokens):
             globals += f"{type} {name} = {data};\n"
             x+=4
 
-
+        elif tokens[x] == "USE":
+            x+=1
+            toUse = tokens[x][4:]
+            defines+= f"using {toUse};"
         elif tokens[x] == "IMPORT":
             if len(tokens) >= x+1:
                 x+=1
@@ -304,6 +313,8 @@ def parser(tokens):
         x += 1
     if isHeader:
         includes = "#pragma once\n"+includes
+    if useKabeTypes:
+        includes += str(f'#include "{packages}stdkabe.h"\n')
     returnValue = str(includes+defines+globals+funcs)
     if not isHeader:
         returnValue+=maine+"return 0;}"

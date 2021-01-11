@@ -129,7 +129,25 @@ def lexer(txt):
             elif word == "cstr": tokens.append("CAST_CSTR")
             elif word == "bool": tokens.append("CAST_BOOL")
             elif word == "void": tokens.append("CAST_VOID")
-            elif word[:5] == "list<": tokens.append("CAST_V:"+str(word[4:]))
+            elif word == "u8": tokens.append("CAST_U8")#
+            elif word == "s8": tokens.append("CAST_S8")
+            elif word == "u16": tokens.append("CAST_U16")
+            elif word == "s16": tokens.append("CAST_S16")
+            elif word == "u32": tokens.append("CAST_U32")
+            elif word == "s32": tokens.append("CAST_S32")
+            elif word == "u64": tokens.append("CAST_U64")
+            elif word == "s64": tokens.append("CAST_S64")
+            elif word == "ul64": tokens.append("CAST_UL64")#
+            elif word == "l64": tokens.append("CAST_L64")
+            elif word == "uf8": tokens.append("CAST_UF8")#
+            elif word == "f8": tokens.append("CAST_F8")
+            elif word == "uf16": tokens.append("CAST_UF16")
+            elif word == "f16": tokens.append("CAST_F16")
+            elif word == "uf32": tokens.append("CAST_UF32")
+            elif word == "f32": tokens.append("CAST_F32")
+            elif word == "uf64": tokens.append("CAST_UF64")
+            elif word == "f64": tokens.append("CAST_F64")
+            elif word[:5] == "list<": tokens.append("CAST_V:"+str(word[4:]))#
             # ========================================================
             # </CASTS>                                               #
             # ========================================================
@@ -146,6 +164,7 @@ def lexer(txt):
             elif word in appendo_opperators: tokens.append("APP:"+(word).replace("and", "&&").replace("or", "||"))
             elif word == "import": tokens.append("IMPORT")
             elif word == "include": tokens.append("INCLUDE")
+            elif word == "use": tokens.append("USE")
             elif word == "!!HEADER_FILE!!" :
                 tokens.append("HEADER:__THIS__")
                 header = True

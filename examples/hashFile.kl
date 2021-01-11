@@ -1,0 +1,21 @@
+include "FileReader"
+include "cryptography/sha512"
+
+// This is so we don't need to specifiy that it is "kabe::FileReader" we want.
+// if you want stuff (class, variable, function, etc...) that's called "FileReader"
+// then you might not want to write this line since it will take the name "FileReader"
+// and give it to "kabe::FileReader".
+use "kabe::FileReader" 
+
+// We'll use argv 1, but we won't do any exception handeling.
+#file = §FileReader : #argv[1]
+
+// If you want to change the hash function used then please look at the "hashFest.kl"
+// File in examples. It should provide examples of every hash function currently
+// supported.
+#fileHash = string §sha512 : §file.getContent
+
+// uncomment below if you want hash to be in caps (also make sure to print correct var)
+//#fileHashUpper = string §fileHash.upper
+
+printf "sha512 : #fileHash"
