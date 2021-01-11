@@ -6,7 +6,6 @@
 #include <boost/lexical_cast.hpp>
 //#include <io.h> //#include <fcntl.h> // don't know when or why I added these two but the program works without them so...
 
-
 #define u8 uint8_t
 #define u16 uint16_t
 #define u32 uint32_t
@@ -47,6 +46,8 @@ T_Input tinput(const kabe::string& prompt)
 	return boost::lexical_cast<T_Input>(line);
 }
 
+// using this one and then converting to int or whatever instead of the template 
+// version above is probably how things will work in kape lang, kinda like python
 kabe::string input(kabe::string prompt = "")
 {
 	std::string line{};
