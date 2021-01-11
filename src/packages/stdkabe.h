@@ -36,6 +36,7 @@
 #define HAS_KABE_TYPE_PACKAGE
 #endif // HAS_KABE_TYPE_PACKAGE
 
+// Source: https://codereview.stackexchange.com/questions/107009/easier-user-input-in-c
 template <typename T_Input>
 T_Input tinput(const kabe::string& prompt)
 {
