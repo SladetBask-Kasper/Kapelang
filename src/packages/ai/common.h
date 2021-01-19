@@ -1,48 +1,53 @@
-
 #pragma once
 #include <iostream>
+#include <string>
 #include <vector>
+
+// print for vectors for debuging
+template <typename T>
+void print(std::vector<T> data, std::string label) {
+	int count = 0;
+	for (T a : data) {
+		std::cout << count++ << " " << label << ": " << a << std::endl;
+	}
+}
+
+template <typename T>
+void print(std::vector<std::vector<T>> data, std::string label) {
+	int count = 0;
+	for (std::vector<T> i : data) {
+		print(i, std::to_string(count) + "->" + label);
+	}
+}
 
 float accuracy_score(std::vector<int> labels, std::vector<int> predicts)
 {
-	using namespace std;
-	vector<int> small;
-	vector<int> big;
+	std::vector<int> small;
+	std::vector<int> big;
 	if (labels.size() >= predicts.size()) {
 		small = predicts;
 		big = labels;
 	}
 
-	int diff = big.size()-small.size();//number of differing items.
+	int diff = big.size() - small.size();
 
-	for (int i = 0; i < small.size();i++)
+	for (size_t i = 0; i < small.size(); i++)
 	{
-		//cout << "IF BIG[" << big[i] << "] != SMALL[" << small[i] << "] ";
 		if (big[i] != small[i])
 		{
 			diff++;
-			//cout << "TRUE" << endl;
 		}
-		/*else
-			cout << "FALSE" << endl;*/
 	}
 
-	//return 1.0f-((float) ((double)diff/(double)big.size()));
-	return ((float) ((double)diff/(double)big.size()));
+	return 1.0f-((float) ((double)diff/(double)big.size()));
+	//return ((float)((double)diff / (double)big.size()));
 }
 
-std::string percent(float x) {
-	return std::to_string(x*100).substr(0,4) + ((std::string) "%");
-}
+std::string percent(float x) { return (std::to_string(x * 100).substr(0, 4) + ((std::string) "%")); }
 
-int vecsize(std::vector<std::vector<double>>& vec)
-{
-	return static_cast<int>(vec.size());
-}
-int vecsize(std::vector<int>& vec)
-{
-	return static_cast<int>(vec.size());
-}
+
+template <typename T>
+int vecsize(std::vector<T>& vec) { return static_cast<int>(vec.size()); }
 
 std::vector<double> pop(std::vector<std::vector<double>>& vec, int index)
 {
@@ -86,14 +91,13 @@ def train_test_split(dataset, split=0.60):
 // ref X_test : (X data)
 // ref y_train : (Same as X_train but for labels)
 // y_test : (Same as X_test but for labels/y data)
-// test_size : self explain'th
+// test_size : self explaining
 // </ARGS>
 //
 void train_test_split(std::vector<std::vector<double>>& X_train,
-	std::vector<std::vector<double>> & X_test, std::vector<int> &y_train, std::vector<int> & y_test,
-	float test_size=0.5)
+	std::vector<std::vector<double>>& X_test, std::vector<int>& y_train, std::vector<int>& y_test,
+	float test_size = 0.5)
 {
-	using namespace std;
 	int train_size = (int)(test_size * vecsize(X_test));
 	while (vecsize(X_train) < train_size)
 	{
@@ -103,8 +107,8 @@ void train_test_split(std::vector<std::vector<double>>& X_train,
 		y_train.push_back(pop(y_test, index));
 	}
 	// Shuffles around X_test
-	vector<vector<double>> tmp_X = {};
-	vector<int> tmp_y = {};
+	std::vector<std::vector<double>> tmp_X = {};
+	std::vector<int> tmp_y = {};
 	while (vecsize(X_test) > 0)
 	{
 		int index = rand() % (vecsize(X_test));
