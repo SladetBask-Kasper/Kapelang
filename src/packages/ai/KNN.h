@@ -1,41 +1,17 @@
 #pragma once
-#include <iostream>
-#include <string>
 #include <iterator>
 #include <numeric>
 #include <algorithm>
 #include <vector>
 #include <functional>
 #include <cmath>
+#include <stdexcept>
 
-using namespace std;
 class KNN
 {
-public:
-	KNN(vector<vector<double>> X, vector<int> y)
-	{
-		fit(X, y);
-	}
-	KNN() {}
-	void fit(vector<vector<double>> X, vector<int> y)
-	{
-		dX_train = X;
-		ny_train = y;
-	}
-	vector<int> predict(vector<vector<double>> X_test)
-	{
-		vector<int> predictions = {};
-
-		for (vector<double> row : X_test) {
-			int label = closest(row);
-			predictions.push_back(label);
-		}
-		return predictions;
-	}
-	~KNN(){}
 private:
-	vector<vector<double>> dX_train = {};
-	vector<int> ny_train;
+	std::vector<std::vector<double>> dX_train;
+	std::vector<int> ny_train;
 
 	// Computes the distance between two std::vectors
 	// SOURCE : http://www.cplusplus.com/forum/general/209784/
@@ -44,17 +20,16 @@ private:
 	{
 		std::vector<double>	auxiliary;
 		std::transform(a.begin(), a.end(), b.begin(), std::back_inserter(auxiliary),
-			[](T element1, T element2) {return pow((element1 - element2), 2); });
+			[](T element1, T element2) {return pow((element1 - element2), 2.0); });
 		auxiliary.shrink_to_fit();
-		// return  sqrt(std::accumulate(auxiliary.begin(), auxiliary.end(), 0 ));
 		return std::sqrt(std::accumulate(auxiliary.begin(), auxiliary.end(), 0.0));
 	}
-	int closest(vector<double> row)
+	int closest(std::vector<double> row)
 	{
-		double best_dist = euc(row, dX_train[0]);
+		double best_dist = euc(row, dX_train.at(0)); // X_test = row | X_train = dX_train
 		int best_index = 0;
 
-		for (int i = 1; i < dX_train.size(); i++)
+		for (size_t i = 1; i < dX_train.size(); i++)
 		{
 			double dist = euc(row, dX_train[i]);
 			if (dist < best_dist) {
@@ -64,4 +39,27 @@ private:
 		}
 		return ny_train[best_index];
 	}
+public:
+	KNN(std::vector<std::vector<double>> X, std::vector<int> y) { fit(X, y); }
+	KNN() {}
+	void fit(std::vector<std::vector<double>> X, std::vector<int> y)
+	{
+		if (X.size() <= 1 || y.size() <= 1) 
+			throw std::invalid_argument("Empty X or y value");
+
+		// I had a problem with this code saving a reference so I hope the below code will make sure to save a copy.
+		//dX_train = X; 
+		//ny_train = y;
+
+		// This code should now copy which the code above seems to not have done.
+		std::copy(y.begin(), y.end(), std::back_inserter(ny_train));
+		std::copy(X.begin(), X.end(), std::back_inserter(dX_train));
+	}
+	std::vector<int> predict(std::vector<std::vector<double>> X_test)
+	{
+		std::vector<int> predictions = {};
+		for (std::vector<double> row : X_test) predictions.push_back(closest(row));
+		return predictions;
+	}
+	~KNN() {}
 };
