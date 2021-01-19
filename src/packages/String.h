@@ -110,14 +110,14 @@ namespace kabe {
         }
 
         string upper() {
-            std::string str = this->replace("ß", "SS").std_str();
+            //std::string str = this->replace("ß", "SS").std_str();
             //std::string str = this->std_str();
-            boost::to_upper(str);
+            boost::locale::to_upper(str);
             return string(str);
         }
         string lower() {
             std::string str = this->std_str();
-            boost::to_lower(str);
+            boost::locale::to_lower(str);
             return string(str);
         }
 
