@@ -1,7 +1,15 @@
+/*
+ * This file contains usefull functions for ai operations.
+ * really this file should be updated to use kabe strings
+ * since kabe strings can in an easy way convert std strings
+ * to kabe strings but std strings cannot do the same in reverce.
+*/
+
 #pragma once
 #include <iostream>
 #include <string>
 #include <vector>
+#include <ctime>
 
 // print for vectors for debuging
 template <typename T>
@@ -98,6 +106,7 @@ void train_test_split(std::vector<std::vector<double>>& X_train,
 	std::vector<std::vector<double>>& X_test, std::vector<int>& y_train, std::vector<int>& y_test,
 	float test_size = 0.5)
 {
+	srand ( time(NULL) );
 	int train_size = (int)(test_size * vecsize(X_test));
 	while (vecsize(X_train) < train_size)
 	{

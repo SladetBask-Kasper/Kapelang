@@ -16,6 +16,12 @@
 #include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
+// not sure why this is needed. We ignore depricated warnings
+// because in g++ the boost usage of "std::auto_ptr" which should
+// be #defined out of existance for g++ 11 and after.
+// I got the code from : http://boost.2283326.n4.nabble.com/Re-release-Boost-1-74-0-Release-Candidate-1-td4712993.html
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#include <boost/locale.hpp>
 #include <boost/algorithm/string.hpp>
 
 namespace kabe {
@@ -111,7 +117,7 @@ namespace kabe {
 
         string upper() {
             //std::string str = this->replace("ß", "SS").std_str();
-            //std::string str = this->std_str();
+            std::string str = this->std_str();
             boost::locale::to_upper(str);
             return string(str);
         }
