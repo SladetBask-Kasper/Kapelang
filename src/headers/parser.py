@@ -313,8 +313,8 @@ def parser(tokens):
         x += 1
     if isHeader:
         includes = "#pragma once\n"+includes
-    if useKabeTypes:
-        includes += str(f'#include "{packages}stdkabe.h"\n')
+    #if useKabeTypes:
+    #    includes += str(f'#include "{packages}stdkabe.h"\n')
     returnValue = str(includes+defines+globals+funcs)
     if not isHeader:
         returnValue+=maine+"return 0;}"

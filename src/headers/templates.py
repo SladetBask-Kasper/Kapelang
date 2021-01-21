@@ -1,4 +1,5 @@
-includes = """
+includes = """\
+#include <stdkabe.h>
 """
 defines = """
 #define VER "0.2.6"
