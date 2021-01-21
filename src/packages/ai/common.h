@@ -9,11 +9,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <ctime>
+#include <stdkabe.h>
+#include <Random.h>
 
 // print for vectors for debuging
 template <typename T>
-void print(std::vector<T> data, std::string label) {
+void print(std::vector<T> data, kabe::string label) {
 	int count = 0;
 	for (T a : data) {
 		std::cout << count++ << " " << label << ": " << a << std::endl;
@@ -21,7 +22,7 @@ void print(std::vector<T> data, std::string label) {
 }
 
 template <typename T>
-void print(std::vector<std::vector<T>> data, std::string label) {
+void print(std::vector<std::vector<T>> data, kabe::string label) {
 	int count = 0;
 	for (std::vector<T> i : data) {
 		print(i, std::to_string(count) + "->" + label);
@@ -51,7 +52,7 @@ float accuracy_score(std::vector<int> labels, std::vector<int> predicts)
 	//return ((float)((double)diff / (double)big.size()));
 }
 
-std::string percent(float x) { return (std::to_string(x * 100).substr(0, 4) + ((std::string) "%")); }
+kabe::string percent(float x) { return (std::to_string(x * 100).substr(0, 4) + ((std::string) "%")); }
 
 
 template <typename T>
@@ -106,21 +107,22 @@ void train_test_split(std::vector<std::vector<double>>& X_train,
 	std::vector<std::vector<double>>& X_test, std::vector<int>& y_train, std::vector<int>& y_test,
 	float test_size = 0.5)
 {
-	srand ( time(NULL) );
+	kabe::Random rng = kabe::Random();
 	int train_size = (int)(test_size * vecsize(X_test));
 	while (vecsize(X_train) < train_size)
 	{
 
-		int index = rand() % (vecsize(X_test));
+		int index = rng.roll(vecsize(X_test));
 		X_train.push_back(pop(X_test, index));
 		y_train.push_back(pop(y_test, index));
 	}
+	rng.setSeed();
 	// Shuffles around X_test
 	std::vector<std::vector<double>> tmp_X = {};
 	std::vector<int> tmp_y = {};
 	while (vecsize(X_test) > 0)
 	{
-		int index = rand() % (vecsize(X_test));
+		int index = rng.roll(vecsize(X_test));
 		tmp_X.push_back(pop(X_test, index));
 		tmp_y.push_back(pop(y_test, index));
 	}
