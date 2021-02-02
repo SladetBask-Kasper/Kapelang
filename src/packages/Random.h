@@ -27,7 +27,7 @@ namespace kabe {
             setSeed();
         }
         int roll() { return rand() % _max + _min; }
-        int roll(int min, int max) { return rand() % max + min; }
+        int roll(int min, int max) { return rand() % (max - min) + min; }
         int roll(int max) { return rand() % max; }
         void setMinMax(int min, int max) {
             _min = min;
