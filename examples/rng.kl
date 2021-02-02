@@ -1,0 +1,9 @@
+include "Random"
+
+#r = §Random
+// will roll between and including 0 and 50
+// if you want to roll between 0 and index then
+// just do something like #x = int §r.roll : §list.size()
+// and it wont count 0 as an extra index.
+#x = int §r.roll : 0 | 50
+printf "Num is #x"

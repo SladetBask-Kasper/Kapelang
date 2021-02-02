@@ -5,6 +5,7 @@ defines = """
 #define VER "0.2.6"
 """
 globals = """
+using namespace kabe;
 """
 funcs = """
 void error(const char *msg)
