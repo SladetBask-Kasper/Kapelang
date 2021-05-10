@@ -165,6 +165,7 @@ def lexer(txt):
             elif word == "import": tokens.append("IMPORT")
             elif word == "include": tokens.append("INCLUDE")
             elif word == "use": tokens.append("USE")
+            elif word == "new": tokens.append("ASSIGN_NEW")
             elif word == "!!HEADER_FILE!!" :
                 tokens.append("HEADER:__THIS__")
                 header = True

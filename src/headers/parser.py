@@ -81,24 +81,28 @@ def parser(tokens):
                 t = datatype_translator(tokens[x+1])
                 newContent = tokens[x+2]
                 a = 0
-                if (len(newContent) >= 5 and newContent[:5] == "FUNC_"):
-                    newContent = tokens[x+2][10:]
-                    a = 3
-                    arguments = "("
-                    if tokens[x+a] == "ARG_RANGE":
-                        a+=1
-                        while not tokens[x+a] == 'END_ARGS':
-                            if tokens[x+a] == "NEXT":
-                                pass
-                            else:
-                                arguments += datatype_to_c(tokens[x+a]) + ", "
-                            a+=1
-                        arguments = arguments[:-2]
-                    arguments += ")"
-                    newContent += arguments
+                if newContent == "ASSIGN_NEW":
+                    content = "ASSIGN_NEW"
+                    a += 2
                 else:
-                    newContent = newContent[4:]
-                content = str(f"({t}) {newContent}")
+                    if (len(newContent) >= 5 and newContent[:5] == "FUNC_"):
+                        newContent = tokens[x+2][10:]
+                        a = 3
+                        arguments = "("
+                        if tokens[x+a] == "ARG_RANGE":
+                            a+=1
+                            while not tokens[x+a] == 'END_ARGS':
+                                if tokens[x+a] == "NEXT":
+                                    pass
+                                else:
+                                    arguments += datatype_to_c(tokens[x+a]) + ", "
+                                a+=1
+                            arguments = arguments[:-2]
+                        arguments += ")"
+                        newContent += arguments
+                    else:
+                        newContent = newContent[4:]
+                    content = str(f"({t}) {newContent}")
                 x+=a-2 #when this was at -1 I had a problem in the file hasher example with print.
             else:
                 types = str(tokens[x+1])[:3]
@@ -127,8 +131,11 @@ def parser(tokens):
                     if len(argl) > 0 and (argl[-1] == ","):
                         argl = argl[:-1]
                     content = t + f"({argl})"
-
-            code += str(f"{t} {varName} = {content};")
+            if content == "ASSIGN_NEW":
+                #code += str(f"{t} {varName} = new {t}();")
+                code += str(f"{t} {varName};")
+            else:
+                code += str(f"{t} {varName} = {content};")
             x += 2-1
         elif tokens[x] == "ASSIGN_FUNC" :
             where = "inFunc"

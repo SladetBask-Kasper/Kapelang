@@ -47,7 +47,7 @@ def datatype_translator(datatype = "CAST_INT"):
     elif datatype == "CAST_VOID":
         return "void"
     elif datatype[:6] == "CAST_V":
-        return "std::vector" + datatype[7:]
+        return "std::vector" + datatype[7:].replace("list", "std::vector")
     else:
         return datatype
     # ======= END OF TYPES ======= #
